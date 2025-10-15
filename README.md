@@ -1,10 +1,10 @@
-# API Naruto
+# 🥷 API Naruto
 
 Este projeto é uma API RESTful baseada no universo de Naruto, criada como um exercício de aprendizado para aprofundar conhecimentos em desenvolvimento backend com o ecossistema Spring.
 
 A API irá gerenciar entidades como Ninjas, Hokages e Missões, incluindo o relacionamento entre elas.
 
-## Objetivos de Aprendizagem
+## 📜 Objetivos de Aprendizagem
 
 - Construção de uma API REST com Spring Boot.
 - Autenticação e autorização com Spring Security (ex: apenas Hokages podem realizar certas ações).
@@ -14,17 +14,17 @@ A API irá gerenciar entidades como Ninjas, Hokages e Missões, incluindo o rela
 - Empacotamento da aplicação com Maven.
 - Preparação para deploy em um ambiente de nuvem (AWS).
 
-## Tecnologias Utilizadas
+## ⚙️ Tecnologias Utilizadas
 
 - **Backend:** Java 17, Spring Boot
 - **Documentação:** Swagger (OpenAPI) - Para documentar e testar os endpoints da API.
 - **Gerenciador de Pacotes:** Maven
-- **Banco de Dados:** PostgreSQL
-- **Containerização:** Docker
+- **Banco de Dados:** PostgreSQL 🐘
+- **Containerização:** Docker 🐳
 - **Migrations:** Flyway
-- **Deploy Alvo:** AWS
+- **Deploy Alvo:** AWS ☁️
 
-## Como Começar
+## 🚀 Como Começar
 
 ### Pré-requisitos
 
@@ -53,6 +53,6 @@ A API irá gerenciar entidades como Ninjas, Hokages e Missões, incluindo o rela
 
 4.  A aplicação estará disponível em `http://localhost:8080`.
 
-## Endpoints da API
+## 🔗 Endpoints da API
 
 _(Esta seção deve ser preenchida com os detalhes dos endpoints disponíveis na sua API. Exemplo: `GET /ninjas`, `POST /missoes`, etc.)_
