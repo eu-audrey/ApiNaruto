@@ -10,7 +10,7 @@ public class NinjaController {
 
     @GetMapping
     public String dizerOla(){
-        return "Olá mundo 🫧🔥🍃🚩";
+        return "Olá mundo 🫧🔥🚩";
     }
 
 }

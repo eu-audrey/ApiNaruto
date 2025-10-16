@@ -3,7 +3,7 @@ services:
     image: postgres:latest
     container_name: naruto-postgres
     environment:
-      POSTGRES_DB: api_naruto
+      POSTGRES_DB: naruto_db
       POSTGRES_USER: audrey
       POSTGRES_PASSWORD: 1234
     ports:
