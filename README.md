@@ -36,7 +36,7 @@ A API irá gerenciar entidades como Ninjas, Hokages e Missões, incluindo o rela
 
 1.  **Clone o repositório:**
     ```sh
-    git clone <URL_DO_SEU_REPOSITORIO>
+    git clone <url aqui do projeto>
     cd ApiNaruto
     ```
 
