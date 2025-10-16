@@ -41,18 +41,20 @@ A API irá gerenciar entidades como Ninjas, Hokages e Missões, incluindo o rela
     ```
 
 2.  **Inicie o banco de dados PostgreSQL com Docker:**
+   👉Necessário docker-desktop instalado e inciado.
+
     O comando abaixo irá subir um contêiner com o banco de dados configurado conforme o `docker-compose.yml`.
     ```sh
     docker-compose up -d
     ```
 
-3.  **Execute a aplicação Spring Boot:**
+4.  **Execute a aplicação Spring Boot:**
     ```sh
     mvn spring-boot:run
     ```
 
-4.  A aplicação estará disponível em `http://localhost:8080`.
+5.  A aplicação estará disponível em `http://localhost:8080`.
 
 ## 🔗 Endpoints da API
 
-_(Esta seção deve ser preenchida com os detalhes dos endpoints disponíveis na sua API. Exemplo: `GET /ninjas`, `POST /missoes`, etc.)_
+_(em construçao)_
