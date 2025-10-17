@@ -15,6 +15,7 @@ public class Ninja {
     private String nome;
     private String aldeia;
     private String elemento;
+    @Column(length = 1000) // Aumentado para 1000 caracteres para acomodar URLs mais longas
     private String imgUrl;
 
 }
