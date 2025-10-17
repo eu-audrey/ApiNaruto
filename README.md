@@ -57,4 +57,44 @@ A API irá gerenciar entidades como Ninjas, Hokages e Missões, incluindo o rela
 
 ## 🔗 Endpoints da API
 
-_(em construçao)_
+### Ninjas
+
+| Método | Endpoint | Descrição |
+|--------|----------|----------|
+| `GET` | `/api/ninjas` | Lista todos os ninjas |
+| `GET` | `/api/ninjas/{id}` | Busca ninja por ID |
+| `POST` | `/api/ninjas` | Cria novo ninja |
+| `PUT` | `/api/ninjas/{id}` | Atualiza ninja existente |
+| `DELETE` | `/api/ninjas/{id}` | Remove ninja por ID |
+
+### Exemplo de Payload (Ninja)
+
+```json
+{
+  "nome": "Naruto Uzumaki",
+  "aldeia": "Konohagakure",
+  "elemento": "Vento",
+  "imgUrl": "https://example.com/naruto.jpg"
+}
+```
+
+## 📊 Status do Projeto
+
+### ✅ Implementado
+- [x] Entidade Ninja com JPA/Hibernate
+- [x] CRUD completo para Ninjas
+- [x] Repository com Spring Data JPA
+- [x] Service Layer com regras de negócio
+- [x] Controller REST com ResponseEntity
+- [x] Tratamento de erros (404, validações)
+- [x] Configuração PostgreSQL + Docker
+- [x] Estrutura Maven
+
+### 🚧 Em Desenvolvimento
+- [ ] Entidades Hokage e Missão
+- [ ] Relacionamentos entre entidades
+- [ ] Spring Security (autenticação/autorização)
+- [ ] Flyway Migrations
+- [ ] Documentação Swagger/OpenAPI
+- [ ] Testes unitários e integração
+- [ ] Deploy AWS
