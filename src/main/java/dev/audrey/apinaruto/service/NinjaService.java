@@ -1,20 +1,22 @@
 package dev.audrey.apinaruto.service;
 
+import dev.audrey.apinaruto.exception.ResourceNotFoundException;
 import dev.audrey.apinaruto.model.Ninja;
 import dev.audrey.apinaruto.repository.NinjaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class NinjaService {
 
-    /*TODO: Refatorar a instancia*/
-    @Autowired
-    private NinjaRepository ninjaRepository;
+    private final NinjaRepository ninjaRepository;
+
+    public NinjaService(NinjaRepository ninjaRepository){
+        this.ninjaRepository = ninjaRepository;
+    }
 
     //criar
     public Ninja criarNinja(Ninja ninja){
@@ -28,14 +30,14 @@ public class NinjaService {
 
     //listarPorId
     //se o usuario pode passar algo que nao existe, melhor usar optional
-    public Optional<Ninja> buscarNinjaPorId(Long id){
-        return ninjaRepository.findById(id);
+    public Optional<Ninja> buscarNinjaPorId(UUID uuid){
+        return ninjaRepository.findById(uuid);
     }
 
     //atualizar ninjas
-    public Ninja atualizarNinjaPorId(Long id, Ninja ninja){
+    public Ninja atualizarNinjaPorId(UUID uuid, Ninja ninja){
         //primeiro preciso achar o ninja
-        Optional<Ninja> ninjaDesatualizado = ninjaRepository.findById(id);
+        Optional<Ninja> ninjaDesatualizado = ninjaRepository.findById(uuid);
 
         if(ninjaDesatualizado.isPresent()){
             Ninja ninjaAtualizado = ninjaDesatualizado.get();
@@ -47,26 +49,23 @@ public class NinjaService {
             if (ninja.getAldeia() != null) {
                 ninjaAtualizado.setAldeia(ninja.getAldeia());
             }
-            if (ninja.getElemento() != null) {
-                ninjaAtualizado.setElemento(ninja.getElemento());
-            }
-            if (ninja.getImgUrl() != null) {
-                ninjaAtualizado.setImgUrl(ninja.getImgUrl());
+            if (ninja.getIdade() != null) {
+                ninjaAtualizado.setIdade(ninja.getIdade());
             }
 
             return ninjaRepository.save(ninjaAtualizado);
         }else{
-            throw new RuntimeException("Ninja não encontrado. Tente novamente. Id fornecido: "+ id);
+            throw new ResourceNotFoundException("Ninja não encontrado. Tente novamente. Id fornecido: "+ uuid);
         }
 
     }
 
     //deletarPorId
-    public void deletarNinjaPorId(Long id){
-        if (!ninjaRepository.existsById(id)) {
-            throw new RuntimeException("Ninja não encontrado para o id " + id);
+    public void deletarNinjaPorId(UUID uuid){
+        if (!ninjaRepository.existsById(uuid)) {
+            throw new RuntimeException("Ninja não encontrado para o id " + uuid);
         }
-        ninjaRepository.deleteById(id);
+        ninjaRepository.deleteById(uuid);
     }
 
 

@@ -1,23 +1,27 @@
 package dev.audrey.apinaruto.controller;
 
+import dev.audrey.apinaruto.model.dto.NinjaDTO;
+import dev.audrey.apinaruto.exception.ResourceNotFoundException;
 import dev.audrey.apinaruto.model.Ninja;
 import dev.audrey.apinaruto.service.NinjaService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 
 @RestController
 @RequestMapping("/api/ninjas")
 public class NinjaController {
 
-    /*TODO: Refatorar a instancia*/
-    @Autowired
-    private NinjaService ninjaService;
+    private final NinjaService ninjaService;
+
+    public NinjaController(NinjaService ninjaService){
+      this.ninjaService = ninjaService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Ninja>> findAllNinjas(){
@@ -26,44 +30,34 @@ public class NinjaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id){ 
-        Optional<Ninja> ninja = ninjaService.buscarNinjaPorId(id);
-
-        if(ninja.isPresent()){
-            return ResponseEntity.ok(ninja.get());
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Desculpa, mas nao achei esse ninja... Digite um id válido🚩");
-        }
+    public ResponseEntity<Ninja> buscarPorId(@PathVariable("id") UUID uuid) {
+        return ninjaService.buscarNinjaPorId(uuid)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResourceNotFoundException("Ninja não encontrado. Id: " + uuid));
     }
 
     @PostMapping
-    public ResponseEntity<Ninja> save(@RequestBody Ninja ninja){
-        Ninja novoNinja = ninjaService.criarNinja(ninja);
-        return new ResponseEntity<>(novoNinja, HttpStatus.CREATED);
+    public ResponseEntity<Ninja> criarNinja(@Valid @RequestBody NinjaDTO ninjaDTO) {
+        Ninja ninja = new Ninja();
+        ninja.setNome(ninjaDTO.nome());
+        ninja.setAldeia(ninjaDTO.aldeia());
+        Ninja criado = ninjaService.criarNinja(ninja);
+        return ResponseEntity.status(HttpStatus.CREATED).body(criado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateById(@PathVariable Long id, @RequestBody Ninja ninja) {
-
-        try {
-            Ninja ninjaAtualizado = ninjaService.atualizarNinjaPorId(id, ninja);
-            return new ResponseEntity<>(ninjaAtualizado, HttpStatus.OK);
-
-        } catch (RuntimeException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(ex.getMessage());
-        }
+    public ResponseEntity<Ninja> atualizar(@PathVariable("id") UUID uuid, @RequestBody NinjaDTO dto) {
+        Ninja ninja = new Ninja();
+        // Atualização parcial é suportada pelo service (que verifica campos nulos)
+        ninja.setNome(dto.nome());
+        Ninja atualizado = ninjaService.atualizarNinjaPorId(uuid, ninja);
+        return ResponseEntity.ok(atualizado);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id){
-        try {
-            ninjaService.deletarNinjaPorId(id);
+    public ResponseEntity<Void> deleteById(@PathVariable("id") UUID uuid){
+            ninjaService.deletarNinjaPorId(uuid);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (RuntimeException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 
 }
