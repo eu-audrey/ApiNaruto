@@ -16,7 +16,7 @@ A API irá gerenciar entidades como Ninjas, Hokages e Missões, incluindo o rela
 
 ## ⚙️ Tecnologias Utilizadas
 
-- **Backend:** Java 17, Spring Boot
+- **Backend:** Java 21, Spring Boot
 - **Documentação:** Swagger (OpenAPI) - Para documentar e testar os endpoints da API.
 - **Gerenciador de Pacotes:** Maven
 - **Banco de Dados:** PostgreSQL 🐘
@@ -28,7 +28,7 @@ A API irá gerenciar entidades como Ninjas, Hokages e Missões, incluindo o rela
 
 ### Pré-requisitos
 
-- Java (JDK 17 ou superior)
+- Java (JDK 21 ou superior)
 - Maven
 - Docker e Docker Compose
 
@@ -72,9 +72,16 @@ A API irá gerenciar entidades como Ninjas, Hokages e Missões, incluindo o rela
 ```json
 {
   "nome": "Naruto Uzumaki",
-  "aldeia": "Konohagakure",
-  "elemento": "Vento",
-  "imgUrl": "https://example.com/naruto.jpg"
+  "aldeia": "Konohagakure"
+}
+```
+
+### Exemplo de Resposta de Erro
+
+```json
+{
+  "error": "Not Found",
+  "message": "Ninja não encontrado com ID: 123e4567-e89b-12d3-a456-426614174000"
 }
 ```
 
@@ -86,7 +93,11 @@ A API irá gerenciar entidades como Ninjas, Hokages e Missões, incluindo o rela
 - [x] Repository com Spring Data JPA
 - [x] Service Layer com regras de negócio
 - [x] Controller REST com ResponseEntity
-- [x] Tratamento de erros (404, validações)
+- [x] **DTOs (Data Transfer Objects)** para requisições
+- [x] **Exceções customizadas** (ResourceNotFoundException)
+- [x] **Global Exception Handler** para tratamento centralizado de erros
+- [x] **Validações** com Bean Validation (@NotBlank)
+- [x] **UUID como ID** para melhor segurança
 - [x] Configuração PostgreSQL + Docker
 - [x] Estrutura Maven
 
