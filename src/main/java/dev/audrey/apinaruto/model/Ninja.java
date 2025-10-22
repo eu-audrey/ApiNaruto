@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import java.util.UUID;
-
 @Entity
 @Table(name = "ninjas")
 @Getter
@@ -17,10 +15,10 @@ import java.util.UUID;
 public class Ninja {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "ninja_id_bananinha", nullable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ninja_id")
     @EqualsAndHashCode.Include
-    private UUID ninjaId;
+    private Long id;
 
     @NotBlank(message = "Nome é obrigatório")
     @Column(name = "nome_ninja")
@@ -29,8 +27,4 @@ public class Ninja {
     private String aldeia;
 
     private Integer idade;
-
-//    @Column(length = 1000) // Aumentado para 1000 caracteres para acomodar URLs mais longas
-//    private String imgUrl;
-
 }

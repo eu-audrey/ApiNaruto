@@ -2,71 +2,74 @@ package dev.audrey.apinaruto.service;
 
 import dev.audrey.apinaruto.exception.ResourceNotFoundException;
 import dev.audrey.apinaruto.model.Ninja;
+import dev.audrey.apinaruto.model.dto.NinjaRequestDTO;
+import dev.audrey.apinaruto.model.dto.NinjaResponseDTO;
 import dev.audrey.apinaruto.repository.NinjaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class NinjaService {
 
     private final NinjaRepository ninjaRepository;
 
-    public NinjaService(NinjaRepository ninjaRepository){
+    public NinjaService(NinjaRepository ninjaRepository) {
         this.ninjaRepository = ninjaRepository;
     }
 
-    //criar
-    public Ninja criarNinja(Ninja ninja){
-        return ninjaRepository.save(ninja);
+    private Ninja requestDTOParaEntity(NinjaRequestDTO ninjaRequestDTO) {
+        Ninja ninja = new Ninja();
+        ninja.setNome(ninjaRequestDTO.nome());
+        ninja.setAldeia(ninjaRequestDTO.aldeia());
+        ninja.setIdade(ninjaRequestDTO.idade());
+        return ninja;
     }
 
-    //listar
-    public List<Ninja> buscarNinja(){
-        return ninjaRepository.findAll();
+    private NinjaResponseDTO entityParaResponseDTO(Ninja ninja) {
+        return new NinjaResponseDTO(ninja.getId(), ninja.getNome(), ninja.getAldeia());
     }
 
-    //listarPorId
-    //se o usuario pode passar algo que nao existe, melhor usar optional
-    public Optional<Ninja> buscarNinjaPorId(UUID uuid){
-        return ninjaRepository.findById(uuid);
+    public NinjaResponseDTO criarNinja(NinjaRequestDTO requestDTO) {
+        Ninja ninjaParaSalvar = requestDTOParaEntity(requestDTO);
+        Ninja ninjaSalvo = ninjaRepository.save(ninjaParaSalvar);
+        return entityParaResponseDTO(ninjaSalvo);
     }
 
-    //atualizar ninjas
-    public Ninja atualizarNinjaPorId(UUID uuid, Ninja ninja){
-        //primeiro preciso achar o ninja
-        Optional<Ninja> ninjaDesatualizado = ninjaRepository.findById(uuid);
+    public Page<NinjaResponseDTO> buscarNinjasPaginado(Pageable pageable) {
+        Page<Ninja> paginasDeNinjas = ninjaRepository.findAll(pageable);
+        return paginasDeNinjas.map(this::entityParaResponseDTO);
+    }
 
-        if(ninjaDesatualizado.isPresent()){
-            Ninja ninjaAtualizado = ninjaDesatualizado.get();
+    public Optional<NinjaResponseDTO> buscarNinjaPorId(Long id) {
+        return ninjaRepository.findById(id).map(this::entityParaResponseDTO);
+    }
 
-            // Atualiza apenas os campos que não são nulos na requisição
-            if (ninja.getNome() != null) {
-                ninjaAtualizado.setNome(ninja.getNome());
-            }
-            if (ninja.getAldeia() != null) {
-                ninjaAtualizado.setAldeia(ninja.getAldeia());
-            }
-            if (ninja.getIdade() != null) {
-                ninjaAtualizado.setIdade(ninja.getIdade());
-            }
+    public NinjaResponseDTO atualizarNinjaPorId(Long id, NinjaRequestDTO requestDTO) {
+        Ninja ninjaExistente = ninjaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Ninja não encontrado. Id: " + id));
 
-            return ninjaRepository.save(ninjaAtualizado);
-        }else{
-            throw new ResourceNotFoundException("Ninja não encontrado. Tente novamente. Id fornecido: "+ uuid);
+        if (requestDTO.nome() != null) {
+            ninjaExistente.setNome(requestDTO.nome());
         }
-
-    }
-
-    //deletarPorId
-    public void deletarNinjaPorId(UUID uuid){
-        if (!ninjaRepository.existsById(uuid)) {
-            throw new RuntimeException("Ninja não encontrado para o id " + uuid);
+        if (requestDTO.aldeia() != null) {
+            ninjaExistente.setAldeia(requestDTO.aldeia());
         }
-        ninjaRepository.deleteById(uuid);
+        if (requestDTO.idade() != null) {
+            ninjaExistente.setIdade(requestDTO.idade());
+        }
+        Ninja ninjaAtualizado = ninjaRepository.save(ninjaExistente);
+        return entityParaResponseDTO(ninjaAtualizado);
     }
 
-
+    public void deletarNinjaPorId(Long id) {
+        if (!ninjaRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Ninja não encontrado para o id " + id);
+        }
+        ninjaRepository.deleteById(id);
+    }
 }
