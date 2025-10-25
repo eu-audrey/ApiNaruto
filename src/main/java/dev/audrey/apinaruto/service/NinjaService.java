@@ -40,7 +40,7 @@ public class NinjaService {
         return entityParaResponseDTO(ninjaSalvo);
     }
 
-    public Page<NinjaResponseDTO> buscarNinjasPaginado(Pageable pageable) {
+    public Page<NinjaResponseDTO> listarNinjasPaginado(Pageable pageable) {
         Page<Ninja> paginasDeNinjas = ninjaRepository.findAll(pageable);
         return paginasDeNinjas.map(this::entityParaResponseDTO);
     }
