@@ -27,4 +27,8 @@ public class Ninja {
     private String aldeia;
 
     private Integer idade;
+
+    @Column(name = "codinome_secreto", nullable = false, unique = true)
+    private String codinomeSecreto;
+
 }

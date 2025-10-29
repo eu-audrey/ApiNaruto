@@ -31,11 +31,13 @@ public class NinjaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NinjaResponseDTO> buscarPorId(@PathVariable("id") Long id) {
+    public ResponseEntity<?> buscarPorId(@PathVariable("id") Long id) {
         return ninjaService.buscarNinjaPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElseGet(() -> {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Heitor, nao achei seu ninja");
+        });
+        }
 
     @PostMapping
     public ResponseEntity<NinjaResponseDTO> criarNinja(@Valid @RequestBody NinjaRequestDTO requestDTO) {

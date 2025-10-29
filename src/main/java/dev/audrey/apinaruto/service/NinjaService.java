@@ -9,19 +9,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Random;
 
 @Service
 public class NinjaService {
 
     private final NinjaRepository ninjaRepository;
 
+    //Lista de palavras pra gerar o codinome
+    private static final String[] SUBSTANTIVOS= {"Aguia", "Falcão", "Sombra", "Relampago", "Fantasma", "Raio", "Tempesatade", "Vampiro", "Dominador", "Força", "Poder", "Chama"};
+    private static final String[] ADJETIVOS = {"Silenciosa", "Poderoso", "Fantasma", "Veloz", "Superior", "Misterioso", "Incansável", "Imbativel"};
+
     public NinjaService(NinjaRepository ninjaRepository) {
         this.ninjaRepository = ninjaRepository;
     }
 
+    //mapeadores dto
     private Ninja requestDTOParaEntity(NinjaRequestDTO ninjaRequestDTO) {
         Ninja ninja = new Ninja();
         ninja.setNome(ninjaRequestDTO.nome());
@@ -30,12 +34,21 @@ public class NinjaService {
         return ninja;
     }
 
+    //metodo que gera um codinome
+    private String gerarCodinomeSecreto() {
+        Random codinomeRandom = new Random();
+        String substantivo = SUBSTANTIVOS[codinomeRandom.nextInt(SUBSTANTIVOS.length)];
+        String adjetivo = ADJETIVOS[codinomeRandom.nextInt(ADJETIVOS.length)];
+        return substantivo + " " + adjetivo;
+    }
+
     private NinjaResponseDTO entityParaResponseDTO(Ninja ninja) {
-        return new NinjaResponseDTO(ninja.getId(), ninja.getNome(), ninja.getAldeia());
+        return new NinjaResponseDTO(ninja.getId(), ninja.getNome(), ninja.getCodinomeSecreto());
     }
 
     public NinjaResponseDTO criarNinja(NinjaRequestDTO requestDTO) {
         Ninja ninjaParaSalvar = requestDTOParaEntity(requestDTO);
+        ninjaParaSalvar.setCodinomeSecreto(gerarCodinomeSecreto());
         Ninja ninjaSalvo = ninjaRepository.save(ninjaParaSalvar);
         return entityParaResponseDTO(ninjaSalvo);
     }
