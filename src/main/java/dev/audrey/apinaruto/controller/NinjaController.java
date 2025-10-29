@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/ninjas")
 public class NinjaController {
@@ -23,10 +25,10 @@ public class NinjaController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<NinjaResponseDTO>> listarNinjasPaginado(
+    public ResponseEntity<List<NinjaResponseDTO>> listarNinjasPaginado(
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)
             Pageable pageable) {
-        Page<NinjaResponseDTO> paginaDeNinjas = ninjaService.buscarNinjasPaginado(pageable);
+        List<NinjaResponseDTO> paginaDeNinjas = ninjaService.listarNinjasPaginado(pageable).getContent();
         return ResponseEntity.ok(paginaDeNinjas);
     }
 
